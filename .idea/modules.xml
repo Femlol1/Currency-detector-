@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CurrencyDetectorAndroid.iml" filepath="$PROJECT_DIR$/.idea/modules/CurrencyDetectorAndroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CurrencyDetectorAndroid.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CurrencyDetectorAndroid.app.iml" />
-    </modules>
-  </component>
-</project>
