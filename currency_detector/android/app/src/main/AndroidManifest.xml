@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.currency_detector">
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
    <application
         android:label="currency_detector"
         android:name="${applicationName}"
