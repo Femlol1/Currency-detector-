@@ -114,32 +114,6 @@ class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
     interpreter.close();
   }
 
-  /*Future<void> detectCurrency(File image) async {
-    if (image == null) return;
-
-    final interpreter = await Interpreter.fromAsset("assets/model.tflite");
-
-    // Resize the image to the expected input size (e.g., 224x224)
-    img.Image? originalImage = img.decodeImage(image.readAsBytesSync());
-    img.Image resizedImage =
-        img.copyResize(originalImage!, width: 224, height: 224);
-
-    // Convert the image data to a Float32List
-    var inputData = imageToFloat32List(resizedImage);
-
-    // Allocate memory for the output tensor
-    var outputData = List<List<double>>.filled(1, List<double>.filled(5, 0));
-
-    // Run the interpreter
-    interpreter
-        .runForMultipleInputs([inputData], outputData as Map<int, Object>);
-
-    // Process the output data and update the _detectedCurrency variable
-    // ...
-
-    interpreter.close();
-  }*/
-
   Float32List imageToFloat32List(img.Image image) {
     var convertedBytes = Float32List(1 * 224 * 224 * 3);
     var buffer = Float32List.view(convertedBytes.buffer);
