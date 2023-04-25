@@ -1,4 +1,4 @@
-name: currency_detector
+name: flutter_currency_guru
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -30,20 +30,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  camera: ^0.8.1
-  tflite: ^1.1.2
-  image_picker: ^0.6.7+22
-  path_provider: ^1.6.27
-  provider: ^6.0.0
-  image: ^2.1.14
-  flutter_native_image: ^0.0.5+3
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  english_words: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -66,8 +57,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  assets:
-    - assets/model.tflite
 
   # To add assets to your application, add an assets section, like this:
   # assets:
