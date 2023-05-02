@@ -392,6 +392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  opencv:
+    dependency: "direct main"
+    description:
+      name: opencv
+      sha256: cd42cc1b3595ec9d79a9d24efebad7f93a4bda91ca389f419afa37d7a379ce8a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   path:
     dependency: transitive
     description:

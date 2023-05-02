@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'dart:typed_data';
+import 'dart:async';
 
 void main() {
   runApp(CurrencyDetectorApp());
@@ -30,47 +32,25 @@ class CurrencyDetectorHomePage extends StatefulWidget {
       _CurrencyDetectorHomePageState();
 }
 
+class Recognition {
+  final String? title;
+  final double? confidence;
+
+  Recognition({this.title, this.confidence});
+}
+
 class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
   final ImagePicker _picker = ImagePicker();
   File? _image; // Makes File type nullable
   String _detectedCurrency = ' ';
-  List<String>? _labels;
-
-  get interpreter => null;
 
   @override
   void initState() {
     super.initState();
-    loadModel();
-    loadLabels();
-  }
-
-  void close() {
-    interpreter.dispose();
-  }
-
-  Future<void> loadModel() async {
-    try {
-      await interpreter.loadModel(
-        model: "assets/model.tflite",
-        labels: "assets/labels.txt",
-      );
-    } catch (e) {
-      print('Error loading model: $e');
-    }
-  }
-
-  Future<void> loadLabels() async {
-    try {
-      String labelsData = await rootBundle.loadString('assets/labels.txt');
-      _labels = labelsData.split('\n');
-    } catch (e) {
-      print('Error loading labels: $e');
-    }
   }
 
   Future<void> _getImage({bool fromCamera = false}) async {
-    final pickedFile = await _picker.getImage(
+    final pickedFile = await _picker.pickImage(
       source: fromCamera ? ImageSource.camera : ImageSource.gallery,
     );
 
@@ -89,13 +69,20 @@ class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
 
     final interpreter = await Interpreter.fromAsset("assets/model.tflite");
 
+    // Load labels
+    String labelsData = await rootBundle.loadString('assets/labels.txt');
+    List<String> _labels = labelsData.split('\n');
+
     // Resize the image to the expected input size (e.g., 224x224)
+    print("Picked image: $_image");
     img.Image? originalImage = img.decodeImage(image.readAsBytesSync());
+    print("Decoded image: $originalImage");
     img.Image resizedImage =
         img.copyResize(originalImage!, width: 224, height: 224);
 
     // Convert the image data to a Float32List
     var inputData = imageToFloat32List(resizedImage);
+    print("Input data: $inputData");
 
     // Allocate memory for the output tensor
     var outputData = List<List<double>>.filled(1, List<double>.filled(5, 0));
@@ -106,7 +93,7 @@ class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
 
     // Process the output data and update the _detectedCurrency variable
     int detectedIndex = outputData[0].indexOf(outputData[0].reduce(max));
-    String detectedLabel = _labels![detectedIndex];
+    String detectedLabel = _labels[detectedIndex];
     setState(() {
       _detectedCurrency = detectedLabel;
     });
