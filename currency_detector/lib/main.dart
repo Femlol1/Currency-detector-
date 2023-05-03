@@ -43,6 +43,8 @@ class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
   final ImagePicker _picker = ImagePicker();
   File? _image; // Makes File type nullable
   String _detectedCurrency = ' ';
+  CameraController? _cameraController;
+  List<CameraDescription>? _cameras;
 
   @override
   void initState() {
