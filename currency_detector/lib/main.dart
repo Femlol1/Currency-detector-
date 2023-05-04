@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:camera/camera.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'dart:typed_data';
@@ -21,8 +20,54 @@ class CurrencyDetectorApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CurrencyDetectorHomePage(),
+      home: SwipeNavigation(),
+      //home: CurrencyDetectorHomePage(),
     );
+  }
+}
+
+class SwipeNavigation extends StatefulWidget {
+  @override
+  _SwipeNavigationState createState() => _SwipeNavigationState();
+}
+
+class _SwipeNavigationState extends State<SwipeNavigation> {
+  final PageController _controller = PageController(initialPage: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Swipe Navigation'),
+      ),
+      body: PageView(
+        controller: _controller,
+        scrollDirection: Axis.horizontal,
+        children: [
+          Container(
+            color: Colors.red,
+            child: Center(
+                child: Text('Main Page', style: TextStyle(fontSize: 24))),
+          ),
+          Container(
+            color: Colors.green,
+            child: Center(
+                child: Text('Second Page', style: TextStyle(fontSize: 24))),
+          ),
+          Container(
+            color: Colors.yellow,
+            child: Center(
+                child: Text('Third Page', style: TextStyle(fontSize: 24))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -32,19 +77,10 @@ class CurrencyDetectorHomePage extends StatefulWidget {
       _CurrencyDetectorHomePageState();
 }
 
-class Recognition {
-  final String? title;
-  final double? confidence;
-
-  Recognition({this.title, this.confidence});
-}
-
 class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
   final ImagePicker _picker = ImagePicker();
   File? _image; // Makes File type nullable
   String _detectedCurrency = ' ';
-  CameraController? _cameraController;
-  List<CameraDescription>? _cameras;
 
   @override
   void initState() {
