@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "758650797327",
+    "firebase_url": "https://currencydetector-f53c3-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "currencydetector-f53c3",
+    "storage_bucket": "currencydetector-f53c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758650797327:android:3d3b45b7dd4edae49d527a",
+        "android_client_info": {
+          "package_name": "com.example.currency_detector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758650797327-tt1ghm5h29s7g3obutr4l06888ooac8l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHlsCpThPa2-0UjP9x7VDDhMWLRuV3wQw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758650797327-tt1ghm5h29s7g3obutr4l06888ooac8l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
