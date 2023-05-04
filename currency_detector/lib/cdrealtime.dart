@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-class CurrencyDetector extends StatefulWidget {
+class CurrencyDetectorrealtime extends StatefulWidget {
   @override
   _CurrencyDetectorState createState() => _CurrencyDetectorState();
 }
 
-class _CurrencyDetectorState extends State<CurrencyDetector> {
+class _CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
   File? _image;
   List? _recognitions;
   bool _loading = false;
@@ -22,6 +22,7 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
         _loading = false;
       });
     });
+    _pickImage(); // Automatically open the camera when the page is opened
   }
 
   Future _loadModel() async {

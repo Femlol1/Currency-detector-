@@ -1,31 +1,44 @@
 import 'dart:io';
-import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tflite/tflite.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
-import 'dart:typed_data';
-import 'dart:async';
+import 'package:flutter/services.dart';
 
-class CurrencyDetectorHomePage extends StatefulWidget {
+class CurrencyDetector extends StatefulWidget {
   @override
-  _CurrencyDetectorHomePageState createState() =>
-      _CurrencyDetectorHomePageState();
+  _CurrencyDetectorState createState() => _CurrencyDetectorState();
 }
 
-class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
-  final ImagePicker _picker = ImagePicker();
-  File? _image; // Makes File type nullable
+class _CurrencyDetectorState extends State<CurrencyDetector> {
+  File? _image;
   String _detectedCurrency = '';
 
   @override
   void initState() {
     super.initState();
+    _loadModel();
+  }
+
+  Future<void> _loadModel() async {
+    Tflite.close();
+    try {
+      String? res = await Tflite.loadModel(
+        model: "assets/model.tflite",
+        labels: "assets/labels.txt",
+        numThreads: 1,
+      );
+      print(res);
+    } catch (e) {
+      print('Failed to load model: $e');
+    }
   }
 
   Future<void> _getImage({bool fromCamera = false}) async {
-    final pickedFile = await _picker.pickImage(
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(
       source: fromCamera ? ImageSource.camera : ImageSource.gallery,
     );
 
@@ -42,38 +55,42 @@ class _CurrencyDetectorHomePageState extends State<CurrencyDetectorHomePage> {
   Future<void> detectCurrency(File image) async {
     if (image == null) return;
 
-    final interpreter = await Interpreter.fromAsset("assets/model.tflite");
-
     // Load labels
     String labelsData = await rootBundle.loadString('assets/labels.txt');
     List<String> _labels = labelsData.split('\n');
 
     // Resize the image to the expected input size (e.g., 224x224)
-    print("Picked image: $_image");
     img.Image? originalImage = img.decodeImage(image.readAsBytesSync());
-    print("Decoded image: $originalImage");
     img.Image resizedImage =
         img.copyResize(originalImage!, width: 224, height: 224);
 
     // Convert the image data to a Float32List
-    var inputData = imageToFloat32List(resizedImage);
-    print("Input data: $inputData");
+    var inputData = imageToFloat32List(resizedImage as img.Image);
 
-    // Allocate memory for the output tensor
-    var outputData = List<List<double>>.filled(1, List<double>.filled(5, 0));
+// Allocate memory for the output tensor
+    var outputData = List<double>.filled(5, 0);
 
-    // Run the interpreter
-    interpreter
-        .runForMultipleInputs([inputData], outputData as Map<int, Object>);
+// Run the interpreter
+    Tflite.runModelOnBinary(
+      binary: inputData.buffer.asUint8List(),
+      numResults: 5,
+      threshold: 0.1,
+    ).then((recognitions) {
+      int detectedIndex = -1;
+      double maxConfidence = -1.0;
 
-    // Process the output data and update the _detectedCurrency variable
-    int detectedIndex = outputData[0].indexOf(outputData[0].reduce(max));
-    String detectedLabel = _labels[detectedIndex];
-    setState(() {
-      _detectedCurrency = detectedLabel;
+      for (final recognition in recognitions!) {
+        if (recognition['confidence'] as double > maxConfidence) {
+          maxConfidence = recognition['confidence'];
+          detectedIndex = recognition['index'];
+        }
+      }
+
+      String detectedLabel = _labels[detectedIndex];
+      setState(() {
+        _detectedCurrency = detectedLabel;
+      });
     });
-
-    interpreter.close();
   }
 
   Float32List imageToFloat32List(img.Image image) {

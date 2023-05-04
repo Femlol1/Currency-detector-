@@ -39,8 +39,8 @@ class _SwipeNavigationState extends State<SwipeNavigation> {
         scrollDirection: Axis.horizontal,
         children: [
           MainPage(),
-          CurrencyDetectorHomePage(),
           CurrencyDetector(),
+          CurrencyDetectorrealtime(),
         ],
       ),
     );
