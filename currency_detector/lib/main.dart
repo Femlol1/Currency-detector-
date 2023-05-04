@@ -1,8 +1,12 @@
+import 'package:currency_detector/auth.dart';
 import 'package:currency_detector/cd.dart';
 import 'package:currency_detector/cdrealtime.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(CurrencyDetectorApp());
 }
 
@@ -14,7 +18,9 @@ class CurrencyDetectorApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SwipeNavigation(),
+      debugShowCheckedModeBanner: false,
+      home: Auth().handleAuthState(),
+      //home: SwipeNavigation(),
       //home: CurrencyDetectorHomePage(),
     );
   }
