@@ -19,26 +19,28 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Currency Guru Login"),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
       ),
       body: Container(
         width: size.width,
         height: size.height,
         padding: EdgeInsets.only(
-            left: 20, right: 20, top: size.height * 0.2, bottom: size.height * 0.5),
+            left: 20,
+            right: 20,
+            top: size.height * 0.2,
+            bottom: size.height * 0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("Hello, \nGoogle sign in",
-                style: TextStyle(
-                    fontSize: 30
-                )),
+                style: TextStyle(fontSize: 30)),
             GestureDetector(
                 onTap: () {
                   Auth().signInWithGoogle();
                 },
-                child: const Image(width: 100, image: AssetImage('assets/google.png'))),
+                child: const Image(
+                    width: 100, image: AssetImage('assets/google.png'))),
           ],
         ),
       ),

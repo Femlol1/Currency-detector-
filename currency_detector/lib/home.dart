@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'auth.dart';
 
@@ -20,11 +22,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
             Text(
               FirebaseAuth.instance.currentUser!.displayName!,
               style: const TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black87),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
             ),
             const SizedBox(
               height: 10,
@@ -32,7 +35,9 @@ class _HomePageState extends State<HomePage> {
             Text(
               FirebaseAuth.instance.currentUser!.email!,
               style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
             ),
             const SizedBox(
               height: 30,
@@ -40,7 +45,8 @@ class _HomePageState extends State<HomePage> {
             MaterialButton(
               padding: const EdgeInsets.all(10),
               color: Colors.green,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
               child: const Text(
                 'LOG OUT',
                 style: TextStyle(color: Colors.white, fontSize: 15),
