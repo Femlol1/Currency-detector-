@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
@@ -12,6 +13,7 @@ class _CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
   File? _image;
   List? _recognitions;
   bool _loading = false;
+  final FlutterTts flutterTts = FlutterTts();
 
   @override
   void initState() {
@@ -72,6 +74,13 @@ class _CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
     });
   }
 
+  void _speak(String text) async {
+    await flutterTts.setLanguage("en-UK");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.speak(text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +108,17 @@ class _CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
                     onPressed: _pickImage,
                     icon: Icon(Icons.camera_alt),
                     label: Text('Take a photo'),
+                  ),
+                  //SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      if (_recognitions != null) {
+                        _speak(
+                            "Detected: ${_recognitions![0]['label']} (${(_recognitions![0]['confidence'] * 100).toStringAsFixed(0)}%)");
+                      }
+                    },
+                    icon: Icon(Icons.volume_up),
+                    label: Text('Speak Result'),
                   ),
                 ],
               ),

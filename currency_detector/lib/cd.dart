@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
@@ -15,6 +16,7 @@ class CurrencyDetector extends StatefulWidget {
 class _CurrencyDetectorState extends State<CurrencyDetector> {
   File? _image;
   String _detectedCurrency = '';
+  final FlutterTts flutterTts = FlutterTts();
 
   @override
   void initState() {
@@ -108,6 +110,13 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
     return convertedBytes;
   }
 
+  void _speak(String text) async {
+    await flutterTts.setLanguage("en-UK");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.speak(text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,6 +151,14 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
             SizedBox(height: 16.0),
             Text(
               'Detected Currency: $_detectedCurrency',
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton.icon(
+              onPressed: () {
+                _speak('Detected Currency: $_detectedCurrency');
+              },
+              icon: Icon(Icons.volume_up),
+              label: Text('Speak Result'),
             ),
           ],
         ),
