@@ -41,11 +41,14 @@ class _SwipeNavigationState extends State<SwipeNavigation> {
       appBar: AppBar(
         title: Text('Currency Guru'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Sign Out',
+          OutlinedButton.icon(
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+            label: Text('Sign Out', style: TextStyle(color: Colors.white)),
             onPressed: () {
-              Auth().signOut(); // Call your sign out method here
+              Auth().signOut();
             },
           ),
         ],
@@ -73,18 +76,69 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
-      child: Center(child: Text('Main Page', style: TextStyle(fontSize: 24))),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/page.png'), fit: BoxFit.cover),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: Text('Main Page', style: TextStyle(fontSize: 24)),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  ),
+                );
+              },
+              child: Text(
+                'Settings',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class ThirdPage extends StatelessWidget {
+class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.yellow,
-      child: Center(child: Text('Third Page', style: TextStyle(fontSize: 24))),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Settings Page', style: TextStyle(fontSize: 24)),
+            SizedBox(height: 16),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Go Back',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
