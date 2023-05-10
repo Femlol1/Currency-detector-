@@ -55,6 +55,7 @@ dependencies:
   tflite_flutter: ^0.9.1
   video_player: ^2.6.1
   flutter_tts: ^3.6.3
+  shared_preferences: ^2.1.1
 
 dev_dependencies:
   flutter_test:

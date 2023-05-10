@@ -1,28 +1,40 @@
 import 'package:currency_detector/auth.dart';
 import 'package:currency_detector/cd.dart';
 import 'package:currency_detector/cdrealtime.dart';
+import 'package:currency_detector/settings.dart';
+import 'package:currency_detector/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(CurrencyDetectorApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeModel(),
+      child: CurrencyDetectorApp(),
+    ),
+  );
 }
 
 class CurrencyDetectorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Currency Detector',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Consumer<ThemeModel>(
+      builder: (context, theme, child) => MaterialApp(
+        title: 'Currency Detector',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          brightness: theme.isDarkTheme ? Brightness.dark : Brightness.light,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Auth().handleAuthState(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: Auth().handleAuthState(),
     );
   }
 }
@@ -105,39 +117,6 @@ class MainPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Settings Page', style: TextStyle(fontSize: 24)),
-            SizedBox(height: 16),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Go Back',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
