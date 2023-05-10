@@ -23,8 +23,6 @@ class CurrencyDetectorApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: Auth().handleAuthState(),
-      //home: SwipeNavigation(),
-      //home: CurrencyDetectorHomePage(),
     );
   }
 }
@@ -42,6 +40,15 @@ class _SwipeNavigationState extends State<SwipeNavigation> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Currency Guru'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Sign Out',
+            onPressed: () {
+              Auth().signOut(); // Call your sign out method here
+            },
+          ),
+        ],
       ),
       body: PageView(
         controller: _controller,

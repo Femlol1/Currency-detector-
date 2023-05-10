@@ -1,3 +1,4 @@
+import 'package:currency_detector/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,7 @@ class Auth {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return HomePage();
+            return SwipeNavigation() /*HomePage()*/;
           } else {
             return const LoginPage();
           }

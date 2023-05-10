@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Currency Guru Login"),
+        title: const Text("Currency Guru"),
         backgroundColor: Colors.blue,
       ),
       body: Container(
