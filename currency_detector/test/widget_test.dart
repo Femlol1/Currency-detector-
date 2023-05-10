@@ -5,35 +5,41 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:currency_detector/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:currency_detector/main.dart';
+import 'package:provider/provider.dart';
+import 'package:currency_detector/theme.dart';
 
-// void main() {
+void main() {
+  testWidgets('CurrencyDetectorApp runs and shows Auth widget',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (context) => ThemeModel(),
+        child: CurrencyDetectorApp(),
+      ),
+    );
 
-  
+    // Expect to find the Auth widget
+    expect(find.byType(Auth), findsOneWidget);
+  });
+  testWidgets('SwipeNavigation displays correct AppBar',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: SwipeNavigation()));
 
-//   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//     // Build our app and trigger a frame.
-//     await tester.pumpWidget(CurrencyDetectorApp());
+    expect(find.text('Currency Guru'), findsOneWidget);
+    expect(find.byType(OutlinedButton), findsOneWidget);
+    expect(find.byIcon(Icons.logout), findsOneWidget);
+  });
 
-//     // Verify that our counter starts at 0.
-//     expect(find.text('0'), findsOneWidget);
-//     expect(find.text('1'), findsNothing);
+  //Test the MainPage widget to see if it displays the correct text and button
+  testWidgets('MainPage displays correct content', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: MainPage()));
 
-//     // Tap the '+' icon and trigger a frame.
-//     await tester.tap(find.byIcon(Icons.add));
-//     await tester.pump();
-
-//     // Verify that our counter has incremented.
-//     expect(find.text('0'), findsNothing);
-//     expect(find.text('1'), findsOneWidget);
-//   });
-// }
-
-
-
-
-
-
+    expect(find.text('Main Page'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+    expect(find.byType(ElevatedButton), findsOneWidget);
+  });
+}
