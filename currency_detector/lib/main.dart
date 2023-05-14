@@ -53,7 +53,7 @@ class _SwipeNavigationState extends State<SwipeNavigation> {
       appBar: AppBar(
         title: Text('Currency Guru'),
         actions: <Widget>[
-          OutlinedButton.icon(
+          TextButton.icon(
             icon: const Icon(
               Icons.logout,
               color: Colors.white,
@@ -87,7 +87,8 @@ class _SwipeNavigationState extends State<SwipeNavigation> {
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+        body: Container(
       decoration: BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/page.png'), fit: BoxFit.cover),
@@ -118,6 +119,6 @@ class MainPage extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 }

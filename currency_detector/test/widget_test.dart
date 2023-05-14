@@ -27,7 +27,13 @@ void main() {
   });
   testWidgets('SwipeNavigation displays correct AppBar',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: SwipeNavigation()));
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (context) => ThemeModel(),
+        child: MaterialApp(home: SwipeNavigation()),
+      ),
+    );
+    await tester.pumpAndSettle();
 
     expect(find.text('Currency Guru'), findsOneWidget);
     expect(find.byType(OutlinedButton), findsOneWidget);
