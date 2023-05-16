@@ -6,18 +6,24 @@ import 'package:currency_detector/settings.dart';
 import 'package:currency_detector/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeModel(),
-      child: CurrencyDetectorApp(),
-    ),
-  );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => TextSizeModel(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ThemeModel(),
+      ),
+    ],
+    child: CurrencyDetectorApp(),
+  ));
 }
 
 class CurrencyDetectorApp extends StatelessWidget {
@@ -88,9 +94,10 @@ class SwipeNavigationState extends State<SwipeNavigation> {
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double textSize = Provider.of<TextSizeModel>(context).textSize;
+
     return Scaffold(
       body: Center(
-        // Add this
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -116,7 +123,7 @@ class MainPage extends StatelessWidget {
                   },
                   child: Text(
                     'Settings',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: textSize),
                   ),
                 ),
               ),

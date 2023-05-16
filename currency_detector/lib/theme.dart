@@ -27,3 +27,14 @@ class ThemeModel extends ChangeNotifier {
     await prefs.setBool('isDarkTheme', _isDarkTheme);
   }
 }
+
+class TextSizeModel extends ChangeNotifier {
+  double _textSize = 16.0; // Default text size
+
+  double get textSize => _textSize;
+
+  void setTextSize(double newSize) {
+    _textSize = newSize;
+    notifyListeners(); // Notifies listeners about the change
+  }
+}

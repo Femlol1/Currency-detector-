@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:currency_detector/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tflite/tflite.dart';
 
 class CurrencyDetectorrealtime extends StatefulWidget {
@@ -83,6 +85,8 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
 
   @override
   Widget build(BuildContext context) {
+    double textSize = Provider.of<TextSizeModel>(context).textSize;
+
     return Scaffold(
       body: _loading
           ? Center(child: CircularProgressIndicator())
@@ -94,22 +98,23 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _image == null
-                      ? Text('No image selected')
+                      ? Text('No image selected',
+                          style: TextStyle(fontSize: textSize))
                       : Image.file(_image!, fit: BoxFit.cover),
                   SizedBox(height: 20),
                   _recognitions != null
                       ? Text(
                           "Detected: ${_recognitions![0]['label']} (${(_recognitions![0]['confidence'] * 100).toStringAsFixed(0)}%)",
-                          style: TextStyle(fontSize: 24),
+                          style: TextStyle(fontSize: textSize),
                         )
                       : Container(),
                   SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: _pickImage,
                     icon: Icon(Icons.camera_alt),
-                    label: Text('Take a photo'),
+                    label: Text('Take a photo',
+                        style: TextStyle(fontSize: textSize)),
                   ),
-                  //SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
                       if (_recognitions != null) {
@@ -118,7 +123,8 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
                       }
                     },
                     icon: Icon(Icons.volume_up),
-                    label: Text('Speak Result'),
+                    label: Text('Speak Result',
+                        style: TextStyle(fontSize: textSize)),
                   ),
                 ],
               ),

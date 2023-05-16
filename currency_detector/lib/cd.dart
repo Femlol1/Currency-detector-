@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:currency_detector/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tflite/tflite.dart';
 
 import 'package:image/image.dart' as img;
@@ -119,63 +121,65 @@ class CurrencyDetectorState extends State<CurrencyDetector> {
 
   @override
   Widget build(BuildContext context) {
+    double textSize = Provider.of<TextSizeModel>(context).textSize;
     return Scaffold(
       body: Center(
-        // Add this
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Upload or capture an image to detect currency:',
-              ),
-              SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _getImage(fromCamera: false);
-                        },
-                        icon: Icon(Icons.image),
-                        label: Text('Select from gallery'),
-                      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Upload or capture an image to detect currency:',
+              style: TextStyle(fontSize: textSize),
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _getImage(fromCamera: false);
+                      },
+                      icon: Icon(Icons.image),
+                      label: Text('Select from gallery',
+                          style: TextStyle(fontSize: textSize)),
                     ),
                   ),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _getImage(fromCamera: true);
-                        },
-                        icon: Icon(Icons.camera),
-                        label: Text('Capture with camera'),
-                      ),
+                ),
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _getImage(fromCamera: true);
+                      },
+                      icon: Icon(Icons.camera),
+                      label: Text('Capture with camera',
+                          style: TextStyle(fontSize: textSize)),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                'Detected Currency: $_detectedCurrency',
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton.icon(
-                onPressed: () {
-                  _speak('Detected Currency: $_detectedCurrency');
-                },
-                icon: Icon(Icons.volume_up),
-                label: Text('Speak Result'),
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Detected Currency: $_detectedCurrency',
+              style: TextStyle(fontSize: textSize),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton.icon(
+              onPressed: () {
+                _speak('Detected Currency: $_detectedCurrency');
+              },
+              icon: Icon(Icons.volume_up),
+              label: Text('Speak Result', style: TextStyle(fontSize: textSize)),
+            ),
+          ],
         ),
-      ), // End of SingleChildScrollView
+      ),
     );
   }
 }
