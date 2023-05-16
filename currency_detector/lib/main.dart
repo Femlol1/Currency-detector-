@@ -1,15 +1,13 @@
 import 'package:currency_detector/auth.dart';
 import 'package:currency_detector/cd.dart';
 import 'package:currency_detector/cdrealtime.dart';
+//import 'package:currency_detector/conversionpage.dart';
 import 'package:currency_detector/settings.dart';
 import 'package:currency_detector/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,10 +39,10 @@ class CurrencyDetectorApp extends StatelessWidget {
 
 class SwipeNavigation extends StatefulWidget {
   @override
-  _SwipeNavigationState createState() => _SwipeNavigationState();
+  SwipeNavigationState createState() => SwipeNavigationState();
 }
 
-class _SwipeNavigationState extends State<SwipeNavigation> {
+class SwipeNavigationState extends State<SwipeNavigation> {
   final PageController _controller = PageController(initialPage: 0);
 
   @override
@@ -70,6 +68,9 @@ class _SwipeNavigationState extends State<SwipeNavigation> {
         scrollDirection: Axis.horizontal,
         children: [
           MainPage(),
+          // ConversionPage(
+          //   baseCurrency: '',
+          // ),
           CurrencyDetector(),
           CurrencyDetectorrealtime(),
         ],
@@ -88,37 +89,41 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/page.png'), fit: BoxFit.cover),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 32),
-            child: Text('Main Page', style: TextStyle(fontSize: 24)),
+      body: Center(
+        // Add this
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/page.png'), fit: BoxFit.cover),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
-                  ),
-                );
-              },
-              child: Text(
-                'Settings',
-                style: TextStyle(fontSize: 18),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 32),
+                child: Text('Main Page', style: TextStyle(fontSize: 24)),
               ),
-            ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Settings',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-    ));
+    );
   }
 }

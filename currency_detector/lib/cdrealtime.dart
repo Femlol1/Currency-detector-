@@ -6,10 +6,10 @@ import 'package:tflite/tflite.dart';
 
 class CurrencyDetectorrealtime extends StatefulWidget {
   @override
-  _CurrencyDetectorState createState() => _CurrencyDetectorState();
+  CurrencyDetectorState createState() => CurrencyDetectorState();
 }
 
-class _CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
+class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
   File? _image;
   List? _recognitions;
   bool _loading = false;
@@ -58,7 +58,7 @@ class _CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
 
   Future _pickImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile == null) return;
 

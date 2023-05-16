@@ -10,10 +10,10 @@ import 'package:flutter/services.dart';
 
 class CurrencyDetector extends StatefulWidget {
   @override
-  _CurrencyDetectorState createState() => _CurrencyDetectorState();
+  CurrencyDetectorState createState() => CurrencyDetectorState();
 }
 
-class _CurrencyDetectorState extends State<CurrencyDetector> {
+class CurrencyDetectorState extends State<CurrencyDetector> {
   File? _image;
   String _detectedCurrency = '';
   final FlutterTts flutterTts = FlutterTts();
@@ -40,7 +40,7 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
 
   Future<void> _getImage({bool fromCamera = false}) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(
+    final pickedFile = await picker.pickImage(
       source: fromCamera ? ImageSource.camera : ImageSource.gallery,
     );
 
@@ -55,11 +55,12 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
   }
 
   Future<void> detectCurrency(File image) async {
+    // ignore: unnecessary_null_comparison
     if (image == null) return;
 
     // Load labels
     String labelsData = await rootBundle.loadString('assets/labels.txt');
-    List<String> _labels = labelsData.split('\n');
+    List<String> labels = labelsData.split('\n');
 
     // Resize the image to the expected input size (e.g., 224x224)
     img.Image? originalImage = img.decodeImage(image.readAsBytesSync());
@@ -67,10 +68,9 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
         img.copyResize(originalImage!, width: 224, height: 224);
 
     // Convert the image data to a Float32List
-    var inputData = imageToFloat32List(resizedImage as img.Image);
+    var inputData = imageToFloat32List(resizedImage);
 
 // Allocate memory for the output tensor
-    var outputData = List<double>.filled(5, 0);
 
 // Run the interpreter
     Tflite.runModelOnBinary(
@@ -88,7 +88,7 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
         }
       }
 
-      String detectedLabel = _labels[detectedIndex];
+      String detectedLabel = labels[detectedIndex];
       setState(() {
         _detectedCurrency = detectedLabel;
       });
@@ -121,48 +121,61 @@ class _CurrencyDetectorState extends State<CurrencyDetector> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Upload or capture an image to detect currency:',
-            ),
-            SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _getImage(fromCamera: false);
-                  },
-                  icon: Icon(Icons.image),
-                  label: Text('Select from gallery'),
-                ),
-                SizedBox(width: 16.0),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _getImage(fromCamera: true);
-                  },
-                  icon: Icon(Icons.camera),
-                  label: Text('Capture with camera'),
-                ),
-              ],
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'Detected Currency: $_detectedCurrency',
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton.icon(
-              onPressed: () {
-                _speak('Detected Currency: $_detectedCurrency');
-              },
-              icon: Icon(Icons.volume_up),
-              label: Text('Speak Result'),
-            ),
-          ],
+        // Add this
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Upload or capture an image to detect currency:',
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          _getImage(fromCamera: false);
+                        },
+                        icon: Icon(Icons.image),
+                        label: Text('Select from gallery'),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          _getImage(fromCamera: true);
+                        },
+                        icon: Icon(Icons.camera),
+                        label: Text('Capture with camera'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Detected Currency: $_detectedCurrency',
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton.icon(
+                onPressed: () {
+                  _speak('Detected Currency: $_detectedCurrency');
+                },
+                icon: Icon(Icons.volume_up),
+                label: Text('Speak Result'),
+              ),
+            ],
+          ),
         ),
-      ),
+      ), // End of SingleChildScrollView
     );
   }
 }
