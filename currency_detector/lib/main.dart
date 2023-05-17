@@ -1,13 +1,13 @@
-import 'package:currency_detector/auth.dart';
-import 'package:currency_detector/cd.dart';
-import 'package:currency_detector/cdrealtime.dart';
-import 'package:currency_detector/conversionpage.dart';
-import 'package:currency_detector/settings.dart';
-import 'package:currency_detector/theme.dart';
+import 'package:currency_detector/authentication/auth.dart';
+import 'package:currency_detector/currencyDetection/cd.dart';
+import 'package:currency_detector/currencyDetection/cdrealtime.dart';
+import 'package:currency_detector/currencyDetection/conversionpage.dart';
+import 'package:currency_detector/settings/settings.dart';
+import 'package:currency_detector/settings/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
+import 'authentication/firebase_options.dart';
 
 // The main entry point for the Flutter application.
 Future<void> main() async {
@@ -55,7 +55,7 @@ class CurrencyDetectorApp extends StatelessWidget {
   }
 }
 
-// this class asllows trhe navigation of the pages in the app through swipes
+// this class allows the navigation of the pages in the app through swipes
 
 class SwipeNavigation extends StatefulWidget {
   @override
@@ -116,10 +116,7 @@ class MainPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/page.png'), fit: BoxFit.cover),
-          ),
+          padding: EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

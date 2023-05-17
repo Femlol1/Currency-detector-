@@ -5,12 +5,12 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:currency_detector/auth.dart';
+import 'package:currency_detector/authentication/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:currency_detector/main.dart';
 import 'package:provider/provider.dart';
-import 'package:currency_detector/theme.dart';
+import 'package:currency_detector/settings/theme.dart';
 
 void main() {
   testWidgets('CurrencyDetectorApp runs and shows Auth widget',
