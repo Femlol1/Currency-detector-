@@ -1,51 +1,68 @@
+import 'package:currency_detector/theme.dart';
 import 'package:flutter/material.dart';
-import 'api_service.dart';
+import 'package:provider/provider.dart';
+//import 'package:currency_detector/text_size_model.dart';
 
-class ConversionPage extends StatefulWidget {
-  final String baseCurrency;
-  ConversionPage({required this.baseCurrency});
-
+class CurrencyConverterPage extends StatefulWidget {
   @override
-  ConversionPageState createState() => ConversionPageState();
+  CurrencyConverterPageState createState() => CurrencyConverterPageState();
 }
 
-class ConversionPageState extends State<ConversionPage> {
-  late Future<Map<String, dynamic>> futureRates;
-
-  @override
-  void initState() {
-    super.initState();
-    futureRates = ApiService().fetchExchangeRates(widget.baseCurrency);
-  }
+class CurrencyConverterPageState extends State<CurrencyConverterPage> {
+  String fromCurrency = "USD";
+  String toCurrency = "EUR";
+  double conversionRate = 0.85; // 1 USD to EUR as of the time of writing
+  double fromValue = 1.0;
+  double toValue = 0.92;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Currency Conversion'),
-      ),
-      body: Center(
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: futureRates,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!['rates'].length,
-                itemBuilder: (context, index) {
-                  var currency = snapshot.data!['rates'].keys.elementAt(index);
-                  var rate = snapshot.data!['rates'][currency];
-                  return ListTile(
-                    title: Text('$currency: $rate'),
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
+    double textSize = Provider.of<TextSizeModel>(context).textSize;
 
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
-          },
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Amount in $fromCurrency',
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  fromValue = double.tryParse(value) ?? 0.0;
+                  toValue = fromValue * conversionRate;
+                });
+              },
+            ),
+            SizedBox(height: 16),
+            Text(
+              '$fromValue $fromCurrency = $toValue $toCurrency',
+              style: TextStyle(fontSize: textSize),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // switch currencies
+                setState(() {
+                  String tempCurrency = fromCurrency;
+                  fromCurrency = toCurrency;
+                  toCurrency = tempCurrency;
+
+                  double tempValue = fromValue;
+                  fromValue = toValue;
+                  toValue = tempValue;
+
+                  conversionRate = 1 / conversionRate;
+                });
+              },
+              child: Text(
+                'Switch Currencies',
+                style: TextStyle(fontSize: textSize),
+              ),
+            ),
+          ],
         ),
       ),
     );

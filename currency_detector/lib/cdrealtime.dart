@@ -12,9 +12,12 @@ class CurrencyDetectorrealtime extends StatefulWidget {
 }
 
 class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
-  File? _image;
-  List? _recognitions;
-  bool _loading = false;
+  File? _image; // _image holds the selected image file.
+  List?
+      _recognitions; // _recognitions holds the result of the currency detection.
+
+  bool _loading = false; // _loading is a boolean to manage the loading state.
+  // flutterTts is an instance of FlutterTts for text-to-speech functionality.
   final FlutterTts flutterTts = FlutterTts();
 
   @override
@@ -22,8 +25,9 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
     super.initState();
     _loading = true;
     _loadModel().then((value) {
+      // It loads the machine learning model.
       setState(() {
-        _loading = false;
+        _loading = false; // After loading the model, it sets _loading to false.
       });
     });
     _pickImage(); // Automatically open the camera when the page is opened
@@ -33,16 +37,19 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
     Tflite.close();
     try {
       String? res = await Tflite.loadModel(
+        // It ensures that any previous model is closed.
         model: "assets/model.tflite",
         labels: "assets/labels.txt",
         numThreads: 1,
       );
-      print(res);
+      print(res); // It prints the result of loading the model.
     } catch (e) {
-      print('Failed to load model: $e');
+      print(
+          'Failed to load model: $e'); // If loading fails, it prints an error message.
     }
   }
 
+  // _recognizeImage method recognizes the currency in the given image file.
   Future _recognizeImage(File image) async {
     var recognitions = await Tflite.runModelOnImage(
       path: image.path,
@@ -53,11 +60,19 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
       asynch: true,
     );
 
+    for (var recognition in recognitions!) {
+      List<String> splitLabel = recognition['label'].split(" ");
+      if (splitLabel.length > 1) {
+        recognition['label'] = splitLabel[1];
+      }
+    }
+
     setState(() {
-      _recognitions = recognitions;
+      _recognitions = recognitions; // It sets the recognized currencies.
     });
   }
 
+  // _pickImage method picks an image from the camera.
   Future _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -65,17 +80,19 @@ class CurrencyDetectorState extends State<CurrencyDetectorrealtime> {
     if (pickedFile == null) return;
 
     setState(() {
-      _loading = true;
-      _image = File(pickedFile.path);
+      _loading = true; // It sets _loading to true when an image is picked.
+      _image = File(pickedFile.path); // It sets the picked image.
     });
 
     _recognizeImage(_image!).then((_) {
       setState(() {
-        _loading = false;
+        _loading =
+            false; // It sets _loading to false after recognizing the image.
       });
     });
   }
 
+// _speak method uses the FlutterTts instance to speak the given text.
   void _speak(String text) async {
     await flutterTts.setLanguage("en-UK");
     await flutterTts.setPitch(1.0);

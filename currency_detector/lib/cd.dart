@@ -6,7 +6,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tflite/tflite.dart';
-
 import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart';
 
@@ -16,30 +15,37 @@ class CurrencyDetector extends StatefulWidget {
 }
 
 class CurrencyDetectorState extends State<CurrencyDetector> {
+  // It has three instance variables:
+  // _image holds the selected image file.
   File? _image;
+  // _detectedCurrency holds the result of the currency detection.
   String _detectedCurrency = '';
+  // flutterTts is an instance of FlutterTts for text-to-speech functionality.
   final FlutterTts flutterTts = FlutterTts();
 
   @override
   void initState() {
     super.initState();
-    _loadModel();
+    _loadModel(); // It loads the machine learning model.
   }
 
+  // _loadModel method loads the machine learning model from assets.
   Future<void> _loadModel() async {
-    Tflite.close();
+    Tflite.close(); // It ensures that any previous model is closed.
     try {
       String? res = await Tflite.loadModel(
         model: "assets/model.tflite",
         labels: "assets/labels.txt",
         numThreads: 1,
       );
-      print(res);
+      print(res); // It prints the result of loading the model.
     } catch (e) {
-      print('Failed to load model: $e');
+      print(
+          'Failed to load model: $e'); // If loading fails, it prints an error message.
     }
   }
 
+  // _getImage method picks an image either from the camera or the gallery,
   Future<void> _getImage({bool fromCamera = false}) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
@@ -48,18 +54,18 @@ class CurrencyDetectorState extends State<CurrencyDetector> {
 
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
+        _image = File(pickedFile.path); // It sets the selected image file.
       });
-      detectCurrency(_image!);
+      detectCurrency(
+          _image!); // It then calls detectCurrency method to detect the currency in the image.
     } else {
-      print('No image selected.');
+      print(
+          'No image selected.'); // If no image is selected, it prints the message.
     }
   }
 
+  // detectCurrency method detects the currency in the given image file.
   Future<void> detectCurrency(File image) async {
-    // ignore: unnecessary_null_comparison
-    if (image == null) return;
-
     // Load labels
     String labelsData = await rootBundle.loadString('assets/labels.txt');
     List<String> labels = labelsData.split('\n');
@@ -74,7 +80,7 @@ class CurrencyDetectorState extends State<CurrencyDetector> {
 
 // Allocate memory for the output tensor
 
-// Run the interpreter
+// It runs the model on the image data and sets the detected currency.
     Tflite.runModelOnBinary(
       binary: inputData.buffer.asUint8List(),
       numResults: 5,
@@ -91,12 +97,17 @@ class CurrencyDetectorState extends State<CurrencyDetector> {
       }
 
       String detectedLabel = labels[detectedIndex];
-      setState(() {
-        _detectedCurrency = detectedLabel;
-      });
+      List<String> splitLabel = detectedLabel.split(" ");
+
+      if (splitLabel.length > 1) {
+        setState(() {
+          _detectedCurrency = splitLabel[1]; // It sets the detected currency.
+        });
+      }
     });
   }
 
+  // imageToFloat32List method converts an image to a Float32List, which is the format required for running the model.
   Float32List imageToFloat32List(img.Image image) {
     var convertedBytes = Float32List(1 * 224 * 224 * 3);
     var buffer = Float32List.view(convertedBytes.buffer);
@@ -112,6 +123,7 @@ class CurrencyDetectorState extends State<CurrencyDetector> {
     return convertedBytes;
   }
 
+  // _speak method uses the FlutterTts instance to speak the given text.
   void _speak(String text) async {
     await flutterTts.setLanguage("en-UK");
     await flutterTts.setPitch(1.0);
