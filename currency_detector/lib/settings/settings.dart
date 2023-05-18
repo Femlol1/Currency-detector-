@@ -16,6 +16,23 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            DropdownButton<Locale>(
+              value: Provider.of<LanguageModel>(context).language,
+              onChanged: (Locale? newValue) {
+                Provider.of<LanguageModel>(context, listen: false)
+                    .setLanguage(newValue!);
+              },
+              items: <Locale>[
+                Locale('en'),
+                Locale('es'),
+                // other locales...
+              ].map<DropdownMenuItem<Locale>>((Locale value) {
+                return DropdownMenuItem<Locale>(
+                  value: value,
+                  child: Text(value.languageCode),
+                );
+              }).toList(),
+            ),
             SizedBox(height: 16),
             Text('Text size: ${textSize.toStringAsFixed(0)}',
                 style: TextStyle(fontSize: textSize)),

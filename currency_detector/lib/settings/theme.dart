@@ -40,7 +40,7 @@ class ThemeModel extends ChangeNotifier {
 // TextSizeModel is a ChangeNotifier that allows its listeners to react to changes in the text size of the app.
 class TextSizeModel extends ChangeNotifier {
   // A private variable that stores the current text size, defaults to 16.0.
-  double _textSize = 16.0;
+  double _textSize = 26.0;
 
   // A getter to allow other parts of the app to read the current text size.
   double get textSize => _textSize;
@@ -51,4 +51,41 @@ class TextSizeModel extends ChangeNotifier {
     // Notifies listeners about the text size change.
     notifyListeners();
   }
+}
+
+class LanguageModel extends ChangeNotifier {
+  Locale _language = Locale('en');
+
+  Locale get language => _language;
+
+  void setLanguage(Locale locale) {
+    _language = locale;
+    notifyListeners();
+  }
+}
+
+class AppLocalization {
+  AppLocalization(this.locale);
+
+  final Locale locale;
+
+  static AppLocalization? of(BuildContext context) {
+    return Localizations.of<AppLocalization>(context, AppLocalization);
+  }
+
+  static Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      'title': 'Hello',
+      // more strings...
+    },
+    'es': {
+      'title': 'Hola',
+      // more strings...
+    },
+  };
+
+  String? get title {
+    return _localizedValues[locale.languageCode]!['title'];
+  }
+  // define more getters...
 }

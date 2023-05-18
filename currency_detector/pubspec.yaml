@@ -40,10 +40,11 @@ dependencies:
   firebase_core: ^2.10.0
   cloud_firestore: ^4.5.2
   firebase_auth: "^4.0.0"
+  sign_in_with_apple: ^4.3.0
+  flutter_signin_button: ^2.0.0
   path: ^1.0.0
   http: ^0.13.6
-  google_sign_in: ^6.1.0
-  flutter_signin_button: ^2.0.0
+  google_sign_in: ^6.1.0  
   cupertino_icons: ^1.0.2
   english_words: ^4.0.0
   tflite_flutter: ^0.9.1
@@ -53,6 +54,10 @@ dependencies:
   flutter_dotenv: ^5.0.2
   google_maps_flutter: ^2.2.6
 
+  flutter_localizations:
+    sdk: flutter
+  mockito: ^5.4.0
+  
 
 dev_dependencies:
   flutter_test:
