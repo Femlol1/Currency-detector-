@@ -1,10 +1,6 @@
-import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:currency_detector/settings/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:tflite/tflite.dart';
 
 class CurrencyDetectorrealtime extends StatefulWidget {
